@@ -3,10 +3,8 @@
 <p>This page is used to add patients to the application</p>
 
 <div>
-    <input type="file" name="file" onChange={changeHandler} />
-    <div>
-        <button onClick={handleSubmission}>Submit</button>
-    </div>
+    <input type="file" name="file" (change)="setSelectedFile($event)" />
+    <button (click)="upload()">Submit</button>
 </div>
-
-
+<p  *ngIf="successFileName" class="text-success">Successfully uploaded file: {{successFileName}}</p>
+<p  *ngIf="error" class="text-failure">Error: Could not upload file</p>
