@@ -1,4 +1,4 @@
-namespace csv_upload
+namespace csv_upload.Models
 {
     public class WeatherForecast
     {

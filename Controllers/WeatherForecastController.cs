@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using csv_upload.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace csv_upload.Controllers
 {

@@ -1,8 +1,15 @@
+using csv_upload;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddDbContext<DBContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("CsvDB")));
+
 builder.Services.AddControllersWithViews();
+
 
 var app = builder.Build();
 
