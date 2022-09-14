@@ -7,7 +7,6 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-patients/fetch-patients.component';
 import { UploadCsvComponent } from './upload-csv/upload-csv.component';
 
@@ -16,7 +15,6 @@ import { UploadCsvComponent } from './upload-csv/upload-csv.component';
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
     FetchDataComponent,
     UploadCsvComponent
   ],
@@ -26,7 +24,6 @@ import { UploadCsvComponent } from './upload-csv/upload-csv.component';
     FormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'upload-csv', component: UploadCsvComponent },
     ])
