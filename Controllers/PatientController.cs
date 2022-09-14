@@ -30,10 +30,17 @@ namespace csv_upload.Controllers
         }
 
         [HttpGet]
-        [Route("/patients")]
-        public IEnumerable<Patient> GetAll()
+        [Route("/patients/")]
+        public IEnumerable<Patient> GetAll(string? filter)
         {
-            return dbContext.Patients.AsEnumerable();
+            if (string.IsNullOrWhiteSpace(filter))
+            {
+                return dbContext.Patients.AsEnumerable();
+            }
+
+            return dbContext.Patients
+                .Where(x => x.FirstName.Contains(filter) || x.LastName.Contains(filter))
+                .AsEnumerable();
         }
 
         [HttpPost]
