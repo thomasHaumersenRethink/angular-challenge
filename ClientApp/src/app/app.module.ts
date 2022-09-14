@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
+import { FetchDataComponent } from './fetch-patients/fetch-patients.component';
 import { UploadCsvComponent } from './upload-csv/upload-csv.component';
 
 @NgModule({
@@ -28,7 +28,7 @@ import { UploadCsvComponent } from './upload-csv/upload-csv.component';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
-      { path: 'upload-csv', component: UploadCsvComponent }
+      { path: 'upload-csv', component: UploadCsvComponent },
     ])
   ],
   providers: [],
