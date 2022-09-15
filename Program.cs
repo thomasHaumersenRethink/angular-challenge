@@ -1,4 +1,5 @@
 using csv_upload;
+using csv_upload.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<DBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("CsvDB")));
 
+builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddControllersWithViews();
 
 
