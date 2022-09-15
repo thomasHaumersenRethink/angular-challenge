@@ -16,7 +16,7 @@ namespace csv_upload.test
             //Arrange
             var mockPatientService = new Mock<IPatientService>();
             mockPatientService.Setup(repo => repo.GetAll(It.IsAny<string?>()))
-                .Returns(superHeroes.AsEnumerable())
+                .Returns(SuperHeroes.AsEnumerable())
                 .Verifiable();
 
             var controller = new PatientController(mockPatientService.Object);
@@ -27,12 +27,14 @@ namespace csv_upload.test
             //Assert
             var okObjectResult = Assert.IsType<OkObjectResult>(result.Result);
             var patients = Assert.IsAssignableFrom<IEnumerable<Patient>>(okObjectResult.Value);
+            var list = patients.ToList();
+            Assert.Equal(4, list.Count);
+            
             var superMan = patients.First();
             Assert.Equal("Clark", superMan.FirstName);
             Assert.Equal("Kent", superMan.LastName);
             Assert.Equal(new DateOnly(1984, 02, 29), superMan.Birthday);
             Assert.Equal("M", superMan.Gender);
-
             mockPatientService.Verify(x => x.GetAll(null), Times.Once());
         }
 
@@ -42,7 +44,7 @@ namespace csv_upload.test
             //arrange
             var mockDb = new Mock<DBContext>();
             var service = new PatientService(mockDb.Object);
-            using var stream = GenerateStreamFromString(superherosCsv);
+            using var stream = GenerateStreamFromString(SuperherosCsv);
             
             //act
             var result = service.Parse(stream);
@@ -62,7 +64,7 @@ namespace csv_upload.test
         public void UploadFile_Test()
         {
             //arrange
-            using var stream = GenerateStreamFromString(superherosCsv);
+            using var stream = GenerateStreamFromString(SuperherosCsv);
             var mockFile = new Mock<IFormFile>();
             mockFile
                 .Setup(x => x.OpenReadStream())
@@ -70,7 +72,7 @@ namespace csv_upload.test
                 .Verifiable();
             var mockPatientService = new Mock<IPatientService>();
             mockPatientService.Setup(x => x.Parse(It.IsAny<Stream>()))
-                .Returns(superHeroes.AsEnumerable())
+                .Returns(SuperHeroes.AsEnumerable())
                 .Verifiable();
             mockPatientService.Setup(x => x.Upsert(It.IsAny<Patient>()))
                 .Verifiable();
@@ -91,7 +93,7 @@ namespace csv_upload.test
             //arrange
             var mockPatientService = new Mock<IPatientService>();
             mockPatientService.Setup(repo => repo.Get(It.IsAny<int>()))
-                .Returns(superHeroes[0])
+                .Returns(SuperHeroes[0])
                 .Verifiable();
 
             var controller = new PatientController(mockPatientService.Object);
@@ -136,11 +138,11 @@ namespace csv_upload.test
             //arrange
             var mockPatientService = new Mock<IPatientService>();
             mockPatientService.Setup(repo => repo.Upsert(It.IsAny<Patient>()))
-                .Returns(superHeroes[0])
+                .Returns(SuperHeroes[0])
                 .Verifiable();
 
             var controller = new PatientController(mockPatientService.Object);
-            var superWoman = superHeroes[1];
+            var superWoman = SuperHeroes[1];
 
             //act
             var result = controller.Patch(superWoman);
@@ -162,12 +164,11 @@ namespace csv_upload.test
             //arrange
             var mockPatientService = new Mock<IPatientService>();
             mockPatientService.Setup(repo => repo.Upsert(It.IsAny<Patient>()))
-                .Returns(superHeroes[0])
+                .Returns(SuperHeroes[0])
                 .Verifiable();
 
             var controller = new PatientController(mockPatientService.Object);
-            var superWoman = superHeroes[1];
-            superWoman.Id = default;
+            var superWoman = new Patient();
             //act
             var result = controller.Patch(superWoman);
 
@@ -187,7 +188,7 @@ namespace csv_upload.test
                 .Verifiable();
 
             var controller = new PatientController(mockPatientService.Object);
-            var superWoman = superHeroes[1];
+            var superWoman = SuperHeroes[1];
             //act
             var result = controller.Patch(superWoman);
 
@@ -227,7 +228,7 @@ namespace csv_upload.test
                 .Verifiable();
 
             var controller = new PatientController(mockPatientService.Object);
-            var superWoman = superHeroes[1];
+            var superWoman = SuperHeroes[1];
 
             //act
             var result = controller.Delete(1);
@@ -283,13 +284,13 @@ namespace csv_upload.test
             },
         };
 
-        private string superherosCsv = @"First Name,Last Name,Birthday,Gender
+        internal static string SuperherosCsv = @"First Name,Last Name,Birthday,Gender
 Clark,Kent,1984-02-29,M
 Diana,Prince,1976-03-22,F
 Tony,Stark,1970-05-29,M
 Carol,Denvers,1968-04-24,F";
 
-        private Patient[] superHeroes = {
+        internal static Patient[] SuperHeroes = {
             new ()
             {
                 Id = 1,
@@ -317,6 +318,37 @@ Carol,Denvers,1968-04-24,F";
             new ()
             {
                 Id = 4,
+                FirstName = "Carol",
+                LastName = "Denvers",
+                Birthday = new DateOnly(1968, 4, 24),
+                Gender = "F",
+            },
+        };
+
+        internal static Patient[] SuperHeroesNoIds = {
+            new ()
+            {
+                FirstName = "Clark",
+                LastName = "Kent",
+                Birthday = new DateOnly(1984, 2, 29),
+                Gender = "M",
+            },
+            new ()
+            {
+                FirstName = "Diana",
+                LastName = "Prince",
+                Birthday = new DateOnly(1976, 3, 22),
+                Gender = "F",
+            },
+            new ()
+            {
+                FirstName = "Tony",
+                LastName = "Stark",
+                Birthday = new DateOnly(1970, 5, 29),
+                Gender = "M",
+            },
+            new ()
+            {
                 FirstName = "Carol",
                 LastName = "Denvers",
                 Birthday = new DateOnly(1968, 4, 24),
