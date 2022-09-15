@@ -53,7 +53,12 @@ namespace csv_upload.Services
             Patient? potentialMatch = null;
             if (patient.Id != default)
             {
-                potentialMatch = this._dbContext.Patients.Single(x => x.Id == patient.Id);
+                potentialMatch = this.Get(patient.Id);
+                if (potentialMatch == default)
+                {
+                    // if id is provide must use it to match
+                    return null;
+                }
             }
 
             if (potentialMatch == default)

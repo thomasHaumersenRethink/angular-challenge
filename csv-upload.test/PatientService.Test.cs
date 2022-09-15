@@ -212,5 +212,32 @@ namespace csv_upload.test
             var result = context.Patients.Single(b => b.Id == 1);
             Assert.Equal("Thomas", result.FirstName);
         }
+
+        [Fact]
+        public void UpdateNotExisting_Test()
+        {
+            // Arrange
+            using var context = Fixture.CreateContext();
+            context.Database.BeginTransaction();
+            var service = new PatientService(context);
+            var tom = new Patient()
+            {
+                Id = 100,
+                FirstName = "Thomas",
+                LastName = "Haumersen",
+                Birthday = new DateOnly(1995, 8, 17),
+                Gender = "M",
+            };
+
+            // Act
+            var result =service.Upsert(tom);
+
+            context.ChangeTracker.Clear();
+
+            // Assert
+            Assert.Null(result);
+            var doubleCheck = context.Patients.SingleOrDefault(x => x.FirstName == "Thomas");
+            Assert.Null(doubleCheck);
+        }
     }
 }
