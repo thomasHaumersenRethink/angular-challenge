@@ -4,6 +4,15 @@ using CsvHelper;
 
 using System.Globalization;
 
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace csv_upload.Services
 {
     public class PatientService : IPatientService
@@ -15,16 +24,63 @@ namespace csv_upload.Services
             this._dbContext = dbContext;
         }
 
-        public IEnumerable<Patient> GetAll(string? filter)
+        public IEnumerable<Patient> GetAll(int? skip, int? take, string? filter, string? orderBy, bool? ascending)
         {
-            if (string.IsNullOrWhiteSpace(filter))
-            {
-                return _dbContext.Patients.AsEnumerable();
-            }
+            IQueryable<Patient> patients = _dbContext.Patients;
             
-            return _dbContext.Patients
-                .Where(x => x.FirstName.Contains(filter) || x.LastName.Contains(filter))
-                .AsEnumerable();
+            if(filter != null)
+            {
+                patients = patients.Where(x => x.FirstName.Contains(filter) || x.LastName.Contains(filter));
+            }
+
+            IEnumerable<Patient> patientsEnum = patients;
+            if(orderBy != null)
+            {
+                patientsEnum = Sort(patients, orderBy, ascending);
+            }
+
+            if(skip != null)
+            {
+                patientsEnum = patientsEnum.Skip(skip.Value);
+            }
+
+            if(take != null)
+            {
+                patientsEnum = patientsEnum.Take(take.Value);
+            }
+
+            return patientsEnum;
+        }
+
+        private IOrderedEnumerable<Patient> Sort(IQueryable<Patient> patients, string orderBy, bool? ascending)
+        {
+            switch (orderBy)
+            {
+                case "id":
+                    return Sort(patients, x => x.Id, ascending);
+                case "firstName":
+                    return Sort(patients, x => x.FirstName, ascending);
+                case "lastName":
+                    return Sort(patients, x => x.LastName, ascending);
+                case "birthday":
+                    return Sort(patients, x => x.Birthday, ascending);
+                case "gender":
+                    return Sort(patients, x => x.Gender, ascending);
+                default:
+                    return Sort(patients, x => x.Id, ascending);
+            }
+        }
+
+        private IOrderedEnumerable<Patient> Sort<T>(IQueryable<Patient> patients, Func<Patient, T> accessor, bool? ascending)
+        {
+            if(ascending == true)
+            {
+                return patients.OrderBy(accessor);
+            }
+            else
+            {
+                return patients.OrderByDescending(accessor);
+            }
         }
 
         public Patient? Get(int id)

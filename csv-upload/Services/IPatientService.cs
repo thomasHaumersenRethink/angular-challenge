@@ -4,7 +4,8 @@ namespace csv_upload.Services
 {
     public interface IPatientService
     {
-        IEnumerable<Patient> GetAll(string? filter);
+
+        IEnumerable<Patient> GetAll(int? skip, int? take, string? filter, string? orderBy, bool? ascending);
 
         Patient? Get(int id);
 

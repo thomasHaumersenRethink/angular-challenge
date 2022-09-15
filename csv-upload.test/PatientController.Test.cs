@@ -12,18 +12,18 @@ namespace csv_upload.test
     public class PatientControllerTest
     {
         [Fact]
-        public void GetAll_Test()
+        public void GetAllNoParams_Test()
         {
             //Arrange
             var mockPatientService = new Mock<IPatientService>();
-            mockPatientService.Setup(repo => repo.GetAll(It.IsAny<string?>()))
+            mockPatientService.Setup(repo => repo.GetAll(It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string?>(), It.IsAny<string?>(), It.IsAny<bool?>()))
                 .Returns(SuperHeroes.AsEnumerable())
                 .Verifiable();
 
             var controller = new PatientController(mockPatientService.Object);
             
             //Act
-            var result = controller.GetAll(null);
+            var result = controller.GetAll(null, null, null, null, null);
 
             //Assert
             var okObjectResult = Assert.IsType<OkObjectResult>(result.Result);
@@ -36,7 +36,7 @@ namespace csv_upload.test
             Assert.Equal("Kent", superMan.LastName);
             Assert.Equal(new DateOnly(1984, 02, 29), superMan.Birthday);
             Assert.Equal("M", superMan.Gender);
-            mockPatientService.Verify(x => x.GetAll(null), Times.Once());
+            mockPatientService.Verify(x => x.GetAll(null, null, null, null, null), Times.Once());
         }
 
         [Fact]

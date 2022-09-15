@@ -14,16 +14,22 @@ namespace csv_upload.Controllers
         {
             this._patientService = patientService;
         }
+
         /// <summary>
         /// Gets all of the patients uploaded
         /// </summary>
+        /// <param name="skip">How many patients to skip, unspecified is none</param>
+        /// <param name="take">How many rows to return, unspecified is unlimted</param>
         /// <param name="filter">Limits the patients returned based on first or last name</param>
-        /// <returns>All the relevant patients</returns>
+        /// <param name="orderBy">which field to sort the patients by. Defaults to ID</param>
+        /// <param name="ascending">whether or not the sort ascending. Defaults to true</param>
+        /// <returns>the queried patients</returns>
         [HttpGet]
-        [Route("/patients/")]
-        public ActionResult<IEnumerable<Patient>> GetAll(string? filter)
+        [Route("/patients")]
+
+        public ActionResult<IEnumerable<Patient>> GetAll(int? skip, int? take, string? filter, string? orderBy, bool? ascending)
         {
-            return Ok(_patientService.GetAll(filter));
+            return Ok(this._patientService.GetAll(skip, take, filter, orderBy, ascending));
         }
 
         /// <summary>
