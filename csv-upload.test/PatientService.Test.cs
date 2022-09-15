@@ -73,6 +73,70 @@ namespace csv_upload.test
         }
 
         [Fact]
+        public void GetAllEs_Test()
+        {
+            // Arrange
+            using var context = Fixture.CreateContext();
+            var service = new PatientService(context);
+
+            // Act
+            var result = service.GetAll("e");
+
+            // Assert
+            var list = result.ToList();
+            Assert.Equal(3, list.Count);
+
+            var msMarvel = list.Last();
+            Assert.Equal("Carol", msMarvel.FirstName);
+            Assert.Equal("Denvers", msMarvel.LastName);
+            Assert.Equal(new DateOnly(1968, 04, 24), msMarvel.Birthday);
+            Assert.Equal("F", msMarvel.Gender);
+        }
+
+        [Fact]
+        public void GetAllDiana_Test()
+        {
+            // Arrange
+            using var context = Fixture.CreateContext();
+            var service = new PatientService(context);
+
+            // Act
+            var result = service.GetAll("Diana");
+
+            // Assert
+            var list = result.ToList();
+            Assert.Single(list);
+
+            var wonderWoman = list.Last();
+            Assert.Equal("Diana", wonderWoman.FirstName);
+            Assert.Equal("Prince", wonderWoman.LastName);
+            Assert.Equal(new DateOnly(1976, 03, 22), wonderWoman.Birthday);
+            Assert.Equal("F", wonderWoman.Gender);
+        }
+
+        [Fact]
+        public void GetAllStark_Test()
+        {
+            // Arrange
+            using var context = Fixture.CreateContext();
+            var service = new PatientService(context);
+
+            // Act
+            var result = service.GetAll("Stark");
+
+            // Assert
+            var list = result.ToList();
+            Assert.Single(list);
+
+            var ironMan = list.Last();
+            Assert.Equal("Tony", ironMan.FirstName);
+            Assert.Equal("Stark", ironMan.LastName);
+            Assert.Equal(new DateOnly(1970, 05, 29), ironMan.Birthday);
+            Assert.Equal("M", ironMan.Gender);
+        }
+
+
+        [Fact]
         public void UpdateExisting_Test()
         {
             // Arrange
