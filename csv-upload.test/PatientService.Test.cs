@@ -19,7 +19,7 @@ namespace csv_upload.test
         public TestDatabaseFixture Fixture { get; }
 
         [Fact]
-        public void GetBlogSuccess_Test()
+        public void GetSuccess_Test()
         {
             // Arrange
             using var context = Fixture.CreateContext();
@@ -37,7 +37,7 @@ namespace csv_upload.test
         }
 
         [Fact]
-        public void GetBlogFail_Test()
+        public void GetFail_Test()
         {
             // Arrange
             using var context = Fixture.CreateContext();
@@ -135,6 +135,65 @@ namespace csv_upload.test
             Assert.Equal("M", ironMan.Gender);
         }
 
+        [Fact]
+        public void DeleteExisting_Test()
+        {
+            // Arrange
+            using var context = Fixture.CreateContext();
+            context.Database.BeginTransaction();
+            var service = new PatientService(context);
+
+            // Act
+            var returnValue = service.Delete(1);
+
+            context.ChangeTracker.Clear();
+
+            // Assert
+            Assert.True(returnValue);
+            var patient = context.Patients.SingleOrDefault(b => b.Id == 1);
+            Assert.Null(patient);
+        }
+
+        [Fact]
+        public void DeleteNotExists_Test()
+        {
+            // Arrange
+            using var context = Fixture.CreateContext();
+            context.Database.BeginTransaction();
+            var service = new PatientService(context);
+
+            // Act
+            var returnValue = service.Delete(100);
+
+            context.ChangeTracker.Clear();
+
+            // Assert
+            Assert.False(returnValue);
+        }
+        [Fact]
+        public void Insert_Test()
+        {
+            // Arrange
+            using var context = Fixture.CreateContext();
+            context.Database.BeginTransaction();
+            var service = new PatientService(context);
+            var tom = new Patient()
+            {
+                FirstName = "Thomas",
+                LastName = "Haumersen",
+                Birthday = new DateOnly(1995, 8, 17),
+                Gender = "M",
+            };
+
+            // Act
+            service.Upsert(tom);
+
+            context.ChangeTracker.Clear();
+
+            // Assert
+            var result = context.Patients.Single(b => b.Id == 5);
+            Assert.Equal("Thomas", result.FirstName);
+        }
 
         [Fact]
         public void UpdateExisting_Test()
@@ -149,7 +208,7 @@ namespace csv_upload.test
                 FirstName = "Thomas",
                 LastName = "Haumersen",
                 Birthday = new DateOnly(1995, 8, 17),
-                Gender = "Ms",
+                Gender = "M",
             };
 
             // Act
@@ -160,7 +219,6 @@ namespace csv_upload.test
             // Assert
             var result = context.Patients.Single(b => b.Id == 1);
             Assert.Equal("Thomas", result.FirstName);
-
         }
     }
 }
