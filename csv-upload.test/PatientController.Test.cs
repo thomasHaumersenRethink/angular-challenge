@@ -16,7 +16,7 @@ namespace csv_upload.test
             //Arrange
             var mockPatientService = new Mock<IPatientService>();
             mockPatientService.Setup(repo => repo.GetAll(It.IsAny<string?>()))
-                .Returns(relatives.AsEnumerable())
+                .Returns(superHeroes.AsEnumerable())
                 .Verifiable();
 
             var controller = new PatientController(mockPatientService.Object);
@@ -27,8 +27,11 @@ namespace csv_upload.test
             //Assert
             var okObjectResult = Assert.IsType<OkObjectResult>(result.Result);
             var patients = Assert.IsAssignableFrom<IEnumerable<Patient>>(okObjectResult.Value);
-            var first = patients.First();
-            Assert.Equal(1, first.Id);
+            var superMan = patients.First();
+            Assert.Equal("Clark", superMan.FirstName);
+            Assert.Equal("Kent", superMan.LastName);
+            Assert.Equal(new DateOnly(1984, 02, 29), superMan.Birthday);
+            Assert.Equal("M", superMan.Gender);
 
             mockPatientService.Verify(x => x.GetAll(null), Times.Once());
         }
@@ -194,7 +197,46 @@ namespace csv_upload.test
             mockPatientService.Verify(x => x.Upsert(It.IsAny<Patient>()), Times.Once());
         }
 
+        [Fact]
+        public void DeleteFound_Test()
+        {
+            //arrange
+            var mockPatientService = new Mock<IPatientService>();
+            mockPatientService.Setup(repo => repo.Delete(It.IsAny<int>()))
+                .Returns(true)
+                .Verifiable();
 
+            var controller = new PatientController(mockPatientService.Object);
+
+            //act
+            var result = controller.Delete(1);
+
+            //Assert
+            var okResult = Assert.IsType<OkResult>(result);
+
+            mockPatientService.Verify(x => x.Delete(It.IsAny<int>()), Times.Once());
+        }
+
+        [Fact]
+        public void DeleteNotFound_Test()
+        {
+            //arrange
+            var mockPatientService = new Mock<IPatientService>();
+            mockPatientService.Setup(repo => repo.Delete(It.IsAny<int>()))
+                .Returns(false)
+                .Verifiable();
+
+            var controller = new PatientController(mockPatientService.Object);
+            var superWoman = superHeroes[1];
+
+            //act
+            var result = controller.Delete(1);
+
+            //Assert
+            var badRequestObjectResult = Assert.IsType<BadRequestObjectResult>(result);
+
+            mockPatientService.Verify(x => x.Delete(It.IsAny<int>()), Times.Once());
+        }
 
         public static Stream GenerateStreamFromString(string s)
         {
