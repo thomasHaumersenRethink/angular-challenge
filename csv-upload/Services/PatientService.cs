@@ -52,13 +52,12 @@ namespace csv_upload.Services
             Patient? potentialMatch = null;
             if (patient.Id != default)
             {
-                potentialMatch = this.Get(patient.Id);
-                return null;
+                potentialMatch = this._dbContext.Patients.Single(x => x.Id == patient.Id);
             }
 
             if (potentialMatch == default)
             {
-                potentialMatch = _dbContext.Patients.SingleOrDefault(x =>
+                potentialMatch = this._dbContext.Patients.SingleOrDefault(x =>
                     x.FirstName == patient.FirstName &&
                     x.LastName == patient.LastName &&
                     x.Birthday == patient.Birthday &&
@@ -67,14 +66,20 @@ namespace csv_upload.Services
 
             if (potentialMatch != default)
             {
-                patient.Id = potentialMatch.Id;
+                //update
+                potentialMatch.FirstName = patient.FirstName;
+                potentialMatch.LastName = patient.LastName;
+                potentialMatch.Birthday = patient.Birthday;
+                potentialMatch.Gender = patient.Gender;
+            }
+            else
+            {
+                //insert
+                this._dbContext.Patients.Add(patient);
             }
 
-            // should insert or update
-            _dbContext.Patients.Update(patient);
-            _dbContext.SaveChanges();
-
-            return patient;
+            this._dbContext.SaveChanges();
+            return potentialMatch ?? patient;
         }
 
         public IEnumerable<Patient> Parse(Stream stream)
