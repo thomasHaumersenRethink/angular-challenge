@@ -40,6 +40,10 @@ namespace csv_upload
                     .HasColumnName("id");
 
                 entity.Property(e => e.LastName).HasColumnName("lastName");
+
+                // this lets the indexes get recreated when the test fixure remakes the db on every test
+                entity.HasIndex(x => x.FirstName);
+                entity.HasIndex(x => x.LastName);
             });
 
             OnModelCreatingPartial(modelBuilder);

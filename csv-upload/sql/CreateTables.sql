@@ -1,14 +1,28 @@
-drop table if exists Patients;
-create table Patients (
-  id int identity(1,1) not null,
-  firstName nvarchar(max) not null,
-  lastName nvarchar(max) not null,
-  birthday date not null,
-  gender nvarchar(100) not null,
-  CONSTRAINT [PK_Patients] PRIMARY KEY CLUSTERED ([ID] ASC)
-)
-
--- insert into Patients(firstName, lastName, birthday, gender)
--- values('tom', 'haumersen', '2010-01-01','m');
-
--- select * from Patients
+CREATE TABLE [dbo].[Patients](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[firstName] [nvarchar](450) NOT NULL,
+	[lastName] [nvarchar](450) NOT NULL,
+	[birthday] [date] NOT NULL,
+	[gender] [nvarchar](100) NOT NULL,
+ CONSTRAINT [PK_Patients] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [IX_Patients_firstName]    Script Date: 9/14/2022 11:26:35 PM ******/
+CREATE NONCLUSTERED INDEX [IX_Patients_firstName] ON [dbo].[Patients]
+(
+	[firstName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [IX_Patients_lastName]    Script Date: 9/14/2022 11:26:35 PM ******/
+CREATE NONCLUSTERED INDEX [IX_Patients_lastName] ON [dbo].[Patients]
+(
+	[lastName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
