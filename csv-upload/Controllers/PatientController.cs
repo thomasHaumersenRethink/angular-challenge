@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Migrations.Operations;
 namespace csv_upload.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("patient")]
     public class PatientController : ControllerBase
     {
         private readonly IPatientService _patientService;
