@@ -1,13 +1,7 @@
-﻿using System.Globalization;
-using System.Text;
-using csv_upload.Models;
+﻿using csv_upload.Models;
 using csv_upload.Services;
-using CsvHelper;
-using Microsoft.AspNetCore.Http;
+
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient.Server;
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
 
 namespace csv_upload.Controllers
 {

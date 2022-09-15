@@ -1,7 +1,8 @@
-﻿using System.Globalization;
-using System.Runtime.CompilerServices;
-using csv_upload.Models;
+﻿using csv_upload.Models;
+
 using CsvHelper;
+
+using System.Globalization;
 
 namespace csv_upload.Services
 {

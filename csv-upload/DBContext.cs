@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using csv_upload.Models;
+﻿using csv_upload.Models;
+
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace csv_upload

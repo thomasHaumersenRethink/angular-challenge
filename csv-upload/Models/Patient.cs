@@ -1,11 +1,12 @@
-﻿using System.Text.Json.Serialization;
-using csv_upload.JsonConverters;
+﻿using csv_upload.JsonConverters;
+
 using CsvHelper.Configuration;
-using CsvHelper.Configuration.Attributes;
+
+using System.Text.Json.Serialization;
 
 namespace csv_upload.Models
 {
-    
+
     public class Patient
     {
         public int Id { get; set; }

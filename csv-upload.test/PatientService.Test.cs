@@ -1,13 +1,5 @@
 ﻿using csv_upload.Models;
 using csv_upload.Services;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting.Server.Features;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace csv_upload.test
 {
